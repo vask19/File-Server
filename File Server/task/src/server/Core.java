@@ -24,6 +24,7 @@ public class Core {
     }
 
     public boolean addFile(String fileName){
+
         if (chekFileName(fileName)){
             if (!files.contains(fileName)){
                 files.add(fileName);

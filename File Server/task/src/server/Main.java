@@ -8,6 +8,11 @@ public class Main {
 
     public static void main(String[] args) {
         Core core = Core.getInstance();
+        System.out.println("+8");
+
+        Server server = Server.getInstance();
+        System.out.println(server.getSocket());
+        System.out.println("+9");
 
 
         do {
