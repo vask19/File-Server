@@ -1,5 +1,8 @@
 package server;
 
+import client.Client;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -7,15 +10,21 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Core core = Core.getInstance();
-        System.out.println("+8");
+        Server server = null;
 
-        Server server = Server.getInstance();
-        System.out.println(server.getSocket());
-        System.out.println("+9");
+        try {
+            server = Server.getInstance();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Core core = Core.getInstance();
 
 
-        do {
+
+
+        /*do {
             String answer = scanner.nextLine();
             if (answer.equals("exit"))
                 return;
@@ -40,7 +49,7 @@ public class Main {
                     break;
             }
 
-        }while (true);
+        }while (true);*/
 
 
 
