@@ -3,6 +3,7 @@ import main.Data;
 
 import java.io.*;
 import java.net.*;
+
 public class Server {
     private Socket socket;
     private static Server instance;
@@ -14,20 +15,12 @@ public class Server {
 
     }
 
-
-
-
     public static Server getInstance() throws IOException {
         if (instance == null) {
             instance = new Server();
-
-
-
         }
         return instance;
     }
-
-
     private static void start()  {
 
         try (ServerSocket serverSocket =
@@ -41,8 +34,6 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }
 class Session extends Thread {
@@ -68,7 +59,6 @@ class Session extends Thread {
             e.printStackTrace();
         }
     }
-
 }
 
 

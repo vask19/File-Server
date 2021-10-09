@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
-
-
     public static void main(String[] args) {
         Server server = null;
 
@@ -19,8 +17,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        //Core core = Core.getInstance();
-
+        Core core = Core.getInstance();
 
 
 
@@ -67,4 +64,3 @@ public class Main {
     }
 
 
-}

@@ -150,11 +150,8 @@ files:
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/projects/52/stages/284/implement#comment
-status: Failed
+status: Solved
 feedback:
-  message: |-
-    Wrong answer in test #1
-
-    Server output should be &quot;Server started!&quot; until the client connects!
-  time: Thu, 07 Oct 2021 16:18:16 UTC
-record: -1
+  message: Congratulations!
+  time: Sat, 09 Oct 2021 16:25:51 UTC
+record: 2

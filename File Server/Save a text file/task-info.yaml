@@ -238,6 +238,141 @@ files:
     }
 
   learner_created: false
+- name: src/client/Client.java
+  visible: true
+  text: |
+    package client;
+
+    import main.Data;
+
+    import java.io.DataInputStream;
+    import java.io.DataOutputStream;
+    import java.io.IOException;
+    import java.net.InetAddress;
+    import java.net.Socket;
+    import java.net.UnknownHostException;
+
+    public class Client {
+        public void start(){
+            System.out.println("Client Started");
+            try(Socket socket = new Socket(Data.SERVER_PATH,Data.SERVER_PORT);
+                DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+                DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());)
+            {
+
+                dataOutputStream.writeUTF("Give me everything you have!");
+                System.out.println("Sent: " + "Give me everything you have!");
+                System.out.println("Received: " + dataInputStream.readUTF());
+
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+  learner_created: true
+- name: src/client/Main.java
+  visible: true
+  text: |
+    package client;
+
+    public class Main {
+        public static void main(String[] args) {
+            Client client = new Client();
+            client.start();
+        }
+    }
+  learner_created: true
+- name: src/server/Server.java
+  visible: true
+  text: "package server;\nimport main.Data;\n\nimport java.io.*;\nimport java.net.*;\n\
+    \npublic class Server {    \n    private Socket socket;\n    private static Server\
+    \ instance;\n    private DataInputStream input;\n    private DataOutputStream\
+    \ output;\n\n    private Server() {\n        start();\n\n    }\n\n    public static\
+    \ Server getInstance() throws IOException {\n        if (instance == null) {\n\
+    \            instance = new Server();\n        }\n        return instance;\n \
+    \   }\n    private static void start()  {\n\n        try (ServerSocket serverSocket\
+    \ =\n                     new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));)\
+    \ {\n            while (true) {\n                Session session = new Session(serverSocket.accept());\n\
+    \                session.start();\n\n            }\n\n        } catch (IOException\
+    \ e) {\n            e.printStackTrace();\n        }\n    }\n}\nclass Session extends\
+    \ Thread {\n    private final Socket socket;\n\n\n    public Session(Socket socketForClient)\
+    \ {\n        this.socket = socketForClient;\n    }\n\n    @Override\n    public\
+    \ void run() {\n        try (\n\n                DataInputStream input = new DataInputStream(socket.getInputStream());\n\
+    \                DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());\n\
+    \        ) {\n            String msg = input.readUTF();\n            outputStream.writeUTF(\"\
+    All files were sent!\");\n\n            System.out.println(msg);\n        } catch\
+    \ (IOException e) {\n            e.printStackTrace();\n        }\n    }\n}\n\n\
+    \n\n"
+  learner_created: true
+- name: src/main/Data.java
+  visible: true
+  text: |
+    package main;
+
+    public class Data {
+        public static final String SERVER_PATH = "127.0.0.1";
+        public static final int SERVER_PORT = 9000;
+
+    }
+  learner_created: true
+- name: src/server/Core.java
+  visible: true
+  text: |
+    package server;
+
+    import java.util.ArrayList;
+    import java.util.List;
+    import java.util.regex.Pattern;
+
+    public class Core {
+        private List<String > files;
+        private final Pattern pattern;
+        private static Core instance;
+        private Core(){
+            files = new ArrayList<>();
+            pattern = Pattern.compile("file([0-9]|10)");
+        };
+        public static Core getInstance(){
+            if (instance == null){
+                instance = new Core();
+            }
+            return instance;
+        }
+
+        private boolean chekFileName(String fileName){
+            return pattern.matcher(fileName).matches();
+        }
+
+        public boolean addFile(String fileName){
+
+            if (chekFileName(fileName)){
+                if (!files.contains(fileName)){
+                    files.add(fileName);
+                   return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean getFile(String fileName){
+            if (chekFileName(fileName)){
+                return files.contains(fileName);
+            }
+            return false;
+        }
+        public boolean deleteFile(String fileName){
+            if (chekFileName(fileName)){
+                return files.remove(fileName);
+            }
+            return false;
+        }
+
+
+
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/52/stages/285/implement#comment
 status: Unchecked
 record: -1
