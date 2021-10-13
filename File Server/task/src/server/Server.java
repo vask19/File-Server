@@ -3,17 +3,21 @@ import main.Data;
 
 import java.io.*;
 import java.net.*;
+import java.util.Map;
 
 public class Server {
+    private Core core;
     private Socket socket;
     private static Server instance;
     private DataInputStream input;
     private DataOutputStream output;
 
     private Server() {
+        core = new Core();
         start();
 
     }
+
 
     public static Server getInstance() throws IOException {
         if (instance == null) {
@@ -21,13 +25,25 @@ public class Server {
         }
         return instance;
     }
+
+
+
+
     private static void start()  {
 
         try (ServerSocket serverSocket =
                      new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));) {
             while (true) {
-                Session session = new Session(serverSocket.accept());
-                session.start();
+                try (
+                        Socket socket = serverSocket.accept();
+                        DataInputStream input = new DataInputStream(socket.getInputStream());
+                        DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+                ) {
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -35,6 +51,20 @@ public class Server {
             e.printStackTrace();
         }
     }
+
+
+    public Map<String ,String > getFile(String fileName){
+        return core.getFile(fileName);
+
+    }
+    public String addFile(String fileName){
+        return core.addFile(fileName);
+    }
+    public String deleteFile(String fileName){
+        return core.deleteFile(fileName);
+    }
+
+
 }
 class Session extends Thread {
     private final Socket socket;
@@ -52,13 +82,15 @@ class Session extends Thread {
                 DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
         ) {
             String msg = input.readUTF();
-            outputStream.writeUTF("All files were sent!");
+
 
             System.out.println(msg);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 }
 
 
