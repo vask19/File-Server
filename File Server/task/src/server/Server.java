@@ -3,14 +3,13 @@ import main.Data;
 
 import java.io.*;
 import java.net.*;
-import java.util.Map;
+
 
 public class Server {
     private Core core;
-    private Socket socket;
     private static Server instance;
-    private DataInputStream input;
-    private DataOutputStream output;
+    private BufferedWriter writer;
+    private BufferedReader reader;
 
     private Server() {
         core = new Core();
@@ -27,45 +26,104 @@ public class Server {
     }
 
 
+    private void run(Socket socket) throws IOException {
+        createStreams(socket);
+        String response = reader.readLine();
+        String httpMethod = response.split(" ")[0];
+        String fileName = response.split(" ")[1];
+
+         switch (httpMethod){
+            case "PUT" -> addFile(fileName);
+            case "DELETE" -> deleteFile(fileName);
+            case "GET" -> getFile(fileName);
+        }
+
+    }
 
 
-    private static void start()  {
-
-        try (ServerSocket serverSocket =
-                     new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));) {
-            while (true) {
-                try (
-                        Socket socket = serverSocket.accept();
-                        DataInputStream input = new DataInputStream(socket.getInputStream());
-                        DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-                ) {
 
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+    private void accept(ServerSocket serverSocket){
+        while (true) {
+            try (Socket socket = serverSocket.accept();)
+            {
+                run(socket);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
+        }
+
+
+
+
+
+    }
+    private void createStreams(Socket socket){
+        try {
+            writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                            socket.getOutputStream()
+                    )
+            );
+            reader = new BufferedReader(
+                    new InputStreamReader(
+                            socket.getInputStream()
+                    )
+            );
+
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
+        }
+
+    }
+
+    private void start()  {
+        try (ServerSocket serverSocket =
+                     new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));)
+        {
+            accept(serverSocket);
+        } catch (IOException e) {
+           throw new RuntimeException();
         }
     }
 
 
-    public Map<String ,String > getFile(String fileName){
-        return core.getFile(fileName);
+    public void getFile(String fileName){
+        String answer = (core.getFile(fileName));
+        try {
+            writer.write(answer + "\n");
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+
 
     }
-    public String addFile(String fileName){
-        return core.addFile(fileName);
+    public void addFile(String fileName){
+        try {
+            String date = reader.readLine();
+            writer.write(core.addFile(fileName,date) +"\n");
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
     }
-    public String deleteFile(String fileName){
-        return core.deleteFile(fileName);
+    public void deleteFile(String fileName){
+        try {
+            writer.write(core.deleteFile(fileName) + "\n");
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
     }
 
 
 }
+
+
+
+
 class Session extends Thread {
     private final Socket socket;
 

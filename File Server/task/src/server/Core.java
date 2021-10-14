@@ -1,8 +1,6 @@
 package server;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,13 +14,7 @@ public class Core {
     private final Pattern pattern;
     private static Core instance;
 
-    public static void main(String[] args) {
-        System.out.println(new Core().addFile("file1.txt"));
-        System.out.println(new Core().addFile("file1.txt"));
-        Map<String,String>m = new Core().getFile("file1.txt") ;
-        System.out.println(m);
-        System.out.println(new Core().deleteFile("file1.txt"));
-    }
+
     public Core(){
         files = new ArrayList<>();
         pattern = Pattern.compile("file([0-9]|10)");
@@ -38,11 +30,15 @@ public class Core {
         return pattern.matcher(fileName).matches();
     }
 
-    public String  addFile(String fileName){
+    public String  addFile(String fileName,String date){
         File file = new File(dataPath + fileName);
         try {
-            if (!file.exists() & file.createNewFile())
+            if (!file.exists() & file.createNewFile()){
+                writeInFile(file,date);
                 return "200";
+
+            }
+
         } catch (IOException e) {
             throw new RuntimeException();
         }
@@ -51,11 +47,24 @@ public class Core {
 
 
 
-    public  Map<String,String > getFile(String fileName){
+    public  String getFile(String fileName){
         File file = new File(dataPath + fileName);
         if (! file.exists())
-            return Map.of("404","not found");
-        else return Map.of("200",readFile(file));
+            return "404";
+        else return "200 " + readFile(file);
+    }
+
+
+    private void writeInFile(File file,String date){
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter(file)
+        )){
+            writer.write(date);
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+
     }
 
     private String readFile(File file) {

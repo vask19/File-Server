@@ -2,10 +2,8 @@ package client;
 
 import main.Data;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.InetAddress;
+import java.io.*;
+
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -13,13 +11,31 @@ public class Client {
     public void start(){
         System.out.println("Client Started");
         try(Socket socket = new Socket(Data.SERVER_PATH,Data.SERVER_PORT);
-            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());)
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(
+                            socket.getInputStream()
+                    ));
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                            socket.getOutputStream()
+                    )
+            )
+        )
         {
+            writer.write("PUT file6.txt\n");
+            writer.flush();
+            writer.write("124\n");
 
-            dataOutputStream.writeUTF("Give me everything you have!");
-            System.out.println("Sent: " + "Give me everything you have!");
-            System.out.println("Received: " + dataInputStream.readUTF());
+
+
+            writer.flush();
+
+            System.out.println(reader.readLine());
+            System.out.println("2");
+
+
+
+
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
