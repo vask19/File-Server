@@ -36,7 +36,6 @@ public class Core {
             if (!file.exists() & file.createNewFile()){
                 writeInFile(file,date);
                 return "200";
-
             }
 
         } catch (IOException e) {
@@ -59,7 +58,7 @@ public class Core {
         try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter(file)
         )){
-            writer.write(date);
+            writer.write(date + "\n");
             writer.flush();
         } catch (IOException e) {
             throw new RuntimeException();

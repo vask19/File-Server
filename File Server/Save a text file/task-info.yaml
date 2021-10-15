@@ -376,13 +376,10 @@ files:
 - name: src/server/data/resp.txt
   visible: true
   learner_created: true
-- name: src/server/data/file3.txt
+- name: src/server/data/txt2.txt
   visible: true
   learner_created: true
-- name: src/server/data/file1.txt
-  visible: true
-  learner_created: true
-- name: src/server/data/file6.txt
+- name: src/server/data/file7.txt
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/projects/52/stages/285/implement#comment

@@ -3,8 +3,6 @@ import main.Data;
 
 import java.io.*;
 import java.net.*;
-
-
 public class Server {
     private Core core;
     private static Server instance;
@@ -16,15 +14,12 @@ public class Server {
         start();
 
     }
-
-
     public static Server getInstance() throws IOException {
         if (instance == null) {
             instance = new Server();
         }
         return instance;
     }
-
 
     private void run(Socket socket) throws IOException {
         createStreams(socket);
@@ -41,8 +36,6 @@ public class Server {
     }
 
 
-
-
     private void accept(ServerSocket serverSocket){
         while (true) {
             try (Socket socket = serverSocket.accept();)
@@ -53,10 +46,6 @@ public class Server {
             }
 
         }
-
-
-
-
 
     }
     private void createStreams(Socket socket){
@@ -118,8 +107,17 @@ public class Server {
         }
     }
 
-
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
