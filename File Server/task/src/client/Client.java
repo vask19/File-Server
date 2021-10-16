@@ -12,8 +12,8 @@ import java.util.Scanner;
 public class Client {
     Scanner sc = new Scanner(System.in);
 
-    public void start(){
-        System.out.println("Client Started");
+    public void start(String answer,String fileName,String date){
+
         try(Socket socket = new Socket(Data.SERVER_PATH,Data.SERVER_PORT);
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(
@@ -26,11 +26,9 @@ public class Client {
             )
         )
         {
-            System.out.println("Enter action (1 - get a file, 2 - create a file, 3 - delete a file):");
-            String answer = sc.nextLine();
-            System.out.println("Enter filename:");
-            String fileName = sc.nextLine();
+            System.out.println("The request was sent.");
             switch (answer){
+
                 case "1" -> {
                     writer.write( "GET " +  fileName + "\n");
                     writer.flush();
@@ -45,11 +43,9 @@ public class Client {
                 case "2" -> {
                     writer.write("PUT " + fileName + "\n");
                     writer.flush();
-                    System.out.println("Enter file content:");
-                    String date = sc.nextLine();
                     writer.write(date + "\n");
                     writer.flush();
-                    System.out.println("1");
+
 
                     String response = reader.readLine();
                     System.out.println(response.equals("200") ? "The response says that the file was created!"
@@ -64,14 +60,17 @@ public class Client {
                             : "The response says that the file was not found!");
 
                 }
+                case "exit" -> {
+                    writer.write("exit\n");
+                    writer.flush();
+                }
             }
 
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
 
 

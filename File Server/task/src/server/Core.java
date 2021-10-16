@@ -58,7 +58,7 @@ public class Core {
         try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter(file)
         )){
-            writer.write(date + "\n");
+            writer.write(date);
             writer.flush();
         } catch (IOException e) {
             throw new RuntimeException();

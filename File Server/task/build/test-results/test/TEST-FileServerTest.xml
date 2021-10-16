@@ -1,15 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="FileServerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-10-09T16:25:50" hostname="HOME-PC" time="1.104">
+<testsuite name="FileServerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-10-16T10:39:27" hostname="HOME-PC" time="0.41">
   <properties/>
-  <testcase name="start" classname="FileServerTest" time="1.104"/>
+  <testcase name="start" classname="FileServerTest" time="0.41"/>
   <system-out><![CDATA[?[1;31m
 Start test 1?[0m
-Server started!
-Client Started
-Sent: Give me everything you have!
-Received: Give me everything you have!
-Sent: All files were sent!
-Received: All files were sent!
+Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+> exit
+The request was sent.
+Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+> 2
+Enter filename:
+> test_purpose_VLL6W1G.txt
+Enter file content:
+> GUOD3FT55FRZWX4Y8M
+The request was sent.
+The response says that the file was created!
+Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+> 2
+Enter filename:
+> test_purpose_VLL6W1G.txt
+Enter file content:
+> GUOD3FT55FRZWX4Y8M
+The request was sent.
+The response says that creating the file was forbidden!
+Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+> 1
+Enter filename:
+> test_purpose_VLL6W1G.txt
+The request was sent.
+The content of the file is: GUOD3FT55FRZWX4Y8M
+Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+> 1
+Enter filename:
+> test_purpose_OHDC8YU0J.txt
+The request was sent.
+The response says that the file was not found!
+Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+> 3
+Enter filename:
+> test_purpose_9CZGMHIFE.txt
+The request was sent.
+The response says that the file was not found!
+Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+> 3
+Enter filename:
+> test_purpose_VLL6W1G.txt
+The request was sent.
+The response says that the file was successfully deleted!
+Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+> exit
+The request was sent.
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

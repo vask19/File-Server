@@ -21,26 +21,44 @@ public class Server {
         return instance;
     }
 
-    private void run(Socket socket) throws IOException {
+    private void run(Socket socket,ServerSocket serverSocket) throws IOException {
         createStreams(socket);
         String response = reader.readLine();
         String httpMethod = response.split(" ")[0];
+
+        if (response.equals("exit")){
+            exit(socket,serverSocket);
+            return;
+        }
+
         String fileName = response.split(" ")[1];
 
          switch (httpMethod){
             case "PUT" -> addFile(fileName);
             case "DELETE" -> deleteFile(fileName);
             case "GET" -> getFile(fileName);
+
+        }
+
+    }
+
+    private void exit(Socket socket, ServerSocket serverSocket) {
+        try {
+            socket.close();
+            serverSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException();
         }
 
     }
 
 
     private void accept(ServerSocket serverSocket){
-        while (true) {
+        while (!serverSocket.isClosed()) {
             try (Socket socket = serverSocket.accept();)
             {
-                run(socket);
+                run(socket,serverSocket);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -72,6 +90,7 @@ public class Server {
                      new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));)
         {
             accept(serverSocket);
+
         } catch (IOException e) {
            throw new RuntimeException();
         }
