@@ -11,8 +11,7 @@ public class Server {
 
     private Server() {
         core = new Core();
-        start();
-
+        startServer();
     }
     public static Server getInstance() throws IOException {
         if (instance == null) {
@@ -20,51 +19,22 @@ public class Server {
         }
         return instance;
     }
-
-    private void run(Socket socket,ServerSocket serverSocket) throws IOException {
-        createStreams(socket);
-        String response = reader.readLine();
+    private void startProcess(Socket socket,String response) throws IOException {
         String httpMethod = response.split(" ")[0];
-
-        if (response.equals("exit")){
-            exit(socket,serverSocket);
-            return;
-        }
-
         String fileName = response.split(" ")[1];
-
          switch (httpMethod){
             case "PUT" -> addFile(fileName);
             case "DELETE" -> deleteFile(fileName);
             case "GET" -> getFile(fileName);
-
         }
-
     }
-
-    private void exit(Socket socket, ServerSocket serverSocket) {
+    private void closeConnection() {
         try {
-            socket.close();
-            serverSocket.close();
+            reader.close();
+            writer.close();
         } catch (IOException e) {
-            throw new RuntimeException();
+            e.printStackTrace();
         }
-
-    }
-
-
-    private void accept(ServerSocket serverSocket){
-        while (!serverSocket.isClosed()) {
-            try (Socket socket = serverSocket.accept();)
-            {
-                run(socket,serverSocket);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
     }
     private void createStreams(Socket socket){
         try {
@@ -78,25 +48,35 @@ public class Server {
                             socket.getInputStream()
                     )
             );
-
         } catch (IOException e) {
             throw new RuntimeException();
         }
-
     }
-
-    private void start()  {
+    private void startServer()  {
         try (ServerSocket serverSocket =
-                     new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));)
-        {
-            accept(serverSocket);
-
+                    new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));){
+            while (!serverSocket.isClosed()) {
+                Socket socket = serverSocket.accept();
+                createStreams(socket);
+                String response = reader.readLine();
+                if (response.equals("exit")){
+                    closeConnection();
+                    serverSocket.close();
+                    return;
+                }
+                new Thread(() -> {
+                    try {
+                        startProcess(socket,response);
+                        closeConnection();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
         } catch (IOException e) {
-           throw new RuntimeException();
+            e.printStackTrace();
         }
     }
-
-
     public void getFile(String fileName){
         String answer = (core.getFile(fileName));
         try {
@@ -105,7 +85,6 @@ public class Server {
         } catch (IOException e) {
             throw new RuntimeException();
         }
-
 
     }
     public void addFile(String fileName){
@@ -125,48 +104,4 @@ public class Server {
             throw new RuntimeException();
         }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Session extends Thread {
-    private final Socket socket;
-
-
-    public Session(Socket socketForClient) {
-        this.socket = socketForClient;
-    }
-
-    @Override
-    public void run() {
-        try (
-
-                DataInputStream input = new DataInputStream(socket.getInputStream());
-                DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-        ) {
-            String msg = input.readUTF();
-
-
-            System.out.println(msg);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-}
-
-
-

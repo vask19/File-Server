@@ -1,22 +1,16 @@
 package server;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Core {
     private final String dataPath = "C:\\Users\\vask\\IdeaProjects\\File Server\\File Server\\task\\src\\server\\data\\";
-    private String separator = File.separator;
-    private List<String > files;
     private final Pattern pattern;
     private static Core instance;
 
 
     public Core(){
-        files = new ArrayList<>();
         pattern = Pattern.compile("file([0-9]|10)");
     };
     public static Core getInstance(){
@@ -29,7 +23,6 @@ public class Core {
     private boolean chekFileName(String fileName){
         return pattern.matcher(fileName).matches();
     }
-
     public String  addFile(String fileName,String date){
         File file = new File(dataPath + fileName);
         try {

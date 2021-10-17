@@ -413,6 +413,434 @@ files:
 
 
   learner_created: false
+- name: src/client/Client.java
+  visible: true
+  text: |
+    package client;
+
+    import main.Data;
+
+    import java.io.*;
+
+    import java.net.Socket;
+    import java.net.UnknownHostException;
+    import java.time.format.SignStyle;
+    import java.util.Scanner;
+
+    public class Client {
+        Scanner sc = new Scanner(System.in);
+
+        public void start(String answer,String fileName,String date){
+
+            try(Socket socket = new Socket(Data.SERVER_PATH,Data.SERVER_PORT);
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(
+                                socket.getInputStream()
+                        ));
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(
+                                socket.getOutputStream()
+                        )
+                )
+            )
+            {
+                System.out.println("The request was sent.");
+                switch (answer){
+
+                    case "1" -> {
+                        writer.write( "GET " +  fileName + "\n");
+                        writer.flush();
+
+                        String response = reader.readLine();
+                        String responseCode = response.substring(0,3);
+                        System.out.println(responseCode.equals("200")
+                                ? "The content of the file is:" + response.substring(3)
+                                : "The response says that the file was not found!");
+
+                    }
+                    case "2" -> {
+                        writer.write("PUT " + fileName + "\n");
+                        writer.flush();
+                        writer.write(date + "\n");
+                        writer.flush();
+
+
+                        String response = reader.readLine();
+                        System.out.println(response.equals("200") ? "The response says that the file was created!"
+                                : "The response says that creating the file was forbidden!");
+                    }
+                    case "3" -> {
+                        writer.write("DELETE " + fileName + "\n");
+                        writer.flush();
+
+                        String response = reader.readLine();
+                        System.out.println(response.equals("200") ? "The response says that the file was successfully deleted!"
+                                : "The response says that the file was not found!");
+
+                    }
+                    case "exit" -> {
+                        writer.write("exit\n");
+                        writer.flush();
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
+
+
+
+
+    }
+  learner_created: true
+- name: src/client/Main.java
+  visible: true
+  text: |
+    package client;
+
+    import java.util.Scanner;
+
+    public class Main {
+        public static void main(String[] args) {
+            /*String date = "";
+            Client client = new Client();
+            client.start("2","123.txt","This is the first file on the server!");
+            client = new Client();
+            client.start("1","123.txt",date);
+            client = new Client();
+            client.start("3","123.txt",date);
+            client = new Client();
+            client.start("3","123.txt",date);
+            client = new Client();
+            client.start("1","file_that_doesnt_exist.txt",date);
+            client = new Client();
+            client.start("exit","","");*/
+
+
+
+
+
+
+
+
+
+
+            Client client = new Client();
+            String answer;
+            String date = " ";
+            String fileName =" ";
+            Scanner sc = new Scanner(System.in);
+
+            System.out.println("Enter action (1 - get a file, 2 - create a file, 3 - delete a file):");
+            answer = sc.nextLine();
+            if (!answer.equals("exit")){
+                System.out.println("Enter filename:");
+                fileName = sc.nextLine();
+
+
+                if (answer.equals("2")) {
+                    System.out.println("Enter file content:");
+                    date = sc.nextLine();
+                }
+
+            }
+            client.start(answer,fileName,date);
+
+
+
+        }
+    }
+  learner_created: true
+- name: src/server/Server.java
+  visible: true
+  text: |+
+    package server;
+    import main.Data;
+
+    import java.io.*;
+    import java.net.*;
+    public class Server {
+        private Core core;
+        private static Server instance;
+        private BufferedWriter writer;
+        private BufferedReader reader;
+
+        private Server() {
+            core = new Core();
+            start();
+
+        }
+        public static Server getInstance() throws IOException {
+            if (instance == null) {
+                instance = new Server();
+            }
+            return instance;
+        }
+
+        private void run(Socket socket,ServerSocket serverSocket) throws IOException {
+            createStreams(socket);
+            String response = reader.readLine();
+            String httpMethod = response.split(" ")[0];
+
+            if (response.equals("exit")){
+                exit(socket,serverSocket);
+                return;
+            }
+
+            String fileName = response.split(" ")[1];
+
+             switch (httpMethod){
+                case "PUT" -> addFile(fileName);
+                case "DELETE" -> deleteFile(fileName);
+                case "GET" -> getFile(fileName);
+
+            }
+
+        }
+
+        private void exit(Socket socket, ServerSocket serverSocket) {
+            try {
+                socket.close();
+                serverSocket.close();
+            } catch (IOException e) {
+                throw new RuntimeException();
+            }
+
+        }
+
+
+        private void accept(ServerSocket serverSocket){
+            while (!serverSocket.isClosed()) {
+                try (Socket socket = serverSocket.accept();)
+                {
+                    run(socket,serverSocket);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+        private void createStreams(Socket socket){
+            try {
+                writer = new BufferedWriter(
+                        new OutputStreamWriter(
+                                socket.getOutputStream()
+                        )
+                );
+                reader = new BufferedReader(
+                        new InputStreamReader(
+                                socket.getInputStream()
+                        )
+                );
+
+            } catch (IOException e) {
+                throw new RuntimeException();
+            }
+
+        }
+
+        private void start()  {
+            try (ServerSocket serverSocket =
+                         new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));)
+            {
+                accept(serverSocket);
+
+            } catch (IOException e) {
+               throw new RuntimeException();
+            }
+        }
+
+
+        public void getFile(String fileName){
+            String answer = (core.getFile(fileName));
+            try {
+                writer.write(answer + "\n");
+                writer.flush();
+            } catch (IOException e) {
+                throw new RuntimeException();
+            }
+
+
+        }
+        public void addFile(String fileName){
+            try {
+                String date = reader.readLine();
+                writer.write(core.addFile(fileName,date) +"\n");
+                writer.flush();
+            } catch (IOException e) {
+                throw new RuntimeException();
+            }
+        }
+        public void deleteFile(String fileName){
+            try {
+                writer.write(core.deleteFile(fileName) + "\n");
+                writer.flush();
+            } catch (IOException e) {
+                throw new RuntimeException();
+            }
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    class Session extends Thread {
+        private final Socket socket;
+
+
+        public Session(Socket socketForClient) {
+            this.socket = socketForClient;
+        }
+
+        @Override
+        public void run() {
+            try (
+
+                    DataInputStream input = new DataInputStream(socket.getInputStream());
+                    DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+            ) {
+                String msg = input.readUTF();
+
+
+                System.out.println(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
+
+
+  learner_created: true
+- name: src/main/Data.java
+  visible: true
+  text: |
+    package main;
+
+    public class Data {
+        public static final String SERVER_PATH = "127.0.0.1";
+        public static final int SERVER_PORT = 9000;
+
+    }
+  learner_created: true
+- name: src/server/Core.java
+  visible: true
+  text: |
+    package server;
+
+    import java.io.*;
+    import java.util.ArrayList;
+    import java.util.List;
+    import java.util.Map;
+    import java.util.Scanner;
+    import java.util.regex.Pattern;
+
+    public class Core {
+        private final String dataPath = "C:\\Users\\vask\\IdeaProjects\\File Server\\File Server\\task\\src\\server\\data\\";
+        private String separator = File.separator;
+        private List<String > files;
+        private final Pattern pattern;
+        private static Core instance;
+
+
+        public Core(){
+            files = new ArrayList<>();
+            pattern = Pattern.compile("file([0-9]|10)");
+        };
+        public static Core getInstance(){
+            if (instance == null){
+                instance = new Core();
+            }
+            return instance;
+        }
+
+        private boolean chekFileName(String fileName){
+            return pattern.matcher(fileName).matches();
+        }
+
+        public String  addFile(String fileName,String date){
+            File file = new File(dataPath + fileName);
+            try {
+                if (!file.exists() & file.createNewFile()){
+                    writeInFile(file,date);
+                    return "200";
+                }
+
+            } catch (IOException e) {
+                throw new RuntimeException();
+            }
+            return "403";
+        }
+
+
+
+        public  String getFile(String fileName){
+            File file = new File(dataPath + fileName);
+            if (! file.exists())
+                return "404";
+            else return "200 " + readFile(file);
+        }
+
+
+        private void writeInFile(File file,String date){
+            try (BufferedWriter writer = new BufferedWriter(
+                    new FileWriter(file)
+            )){
+                writer.write(date);
+                writer.flush();
+            } catch (IOException e) {
+                throw new RuntimeException();
+            }
+
+        }
+
+        private String readFile(File file) {
+            StringBuilder fileContents = new StringBuilder();
+            try (Scanner scanner = new Scanner(file)){
+                while (scanner.hasNextLine())
+                    fileContents.append(scanner.nextLine());
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException();
+            }
+            return fileContents.toString();
+        }
+
+        public String  deleteFile(String fileName){
+            File file = new File(dataPath + fileName);
+            if (file.exists() & file.delete())
+                return "200";
+            return "404";
+        }
+
+
+
+    }
+  learner_created: true
+- name: src/server/data/rt.txt
+  visible: true
+  learner_created: true
+- name: src/server/data/er.txt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/52/stages/286/implement#comment
 status: Unchecked
 record: -1
