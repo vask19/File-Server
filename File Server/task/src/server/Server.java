@@ -4,7 +4,7 @@ import main.Data;
 import java.io.*;
 import java.net.*;
 public class Server {
-    private Core core;
+    private final Core core;
     private static Server instance;
     private BufferedWriter writer;
     private BufferedReader reader;
@@ -54,7 +54,7 @@ public class Server {
     }
     private void startServer()  {
         try (ServerSocket serverSocket =
-                    new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));){
+                    new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH))){
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
                 createStreams(socket);
