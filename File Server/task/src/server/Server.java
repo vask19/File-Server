@@ -26,7 +26,33 @@ public class Server {
             case "PUT" -> addFile(fileName);
             case "DELETE" -> deleteFile(fileName);
             case "GET" -> getFile(fileName);
+            case "4" -> test();
         }
+    }
+
+    private void test(){
+        try( BufferedInputStream inputStream = new BufferedInputStream(
+                new FileInputStream("C:\\Users\\vask\\IdeaProjects\\File Server\\File Server\\task\\src\\server\\data\\123png.png"));
+
+        ) {
+            int i;
+
+            System.out.println("1");
+            while ((i = inputStream.read()) != -1){
+                writer.write(i);
+                System.out.println("2");
+                writer.flush();
+                System.out.println("3");
+            }
+            System.out.println("4");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
     }
     private void closeConnection() {
         try {

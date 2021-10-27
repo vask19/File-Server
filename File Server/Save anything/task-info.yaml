@@ -844,6 +844,21 @@ files:
 - name: src/client/Request.java
   visible: true
   learner_created: true
+- name: src/client/test.java
+  visible: true
+  learner_created: true
+- name: src/client/data/txt.txt
+  visible: true
+  learner_created: true
+- name: src/client/data/file2.txt
+  visible: true
+  learner_created: true
+- name: src/streams/Streams.java
+  visible: true
+  learner_created: true
+- name: src/main/FileHandler.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/52/stages/286/implement#comment
 status: Unchecked
 record: -1
