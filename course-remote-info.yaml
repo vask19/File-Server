@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/209950/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Wed, 27 Oct 2021 11:34:27 UTC
+update_date: Mon, 01 Nov 2021 07:43:22 UTC
 stages:
 - id: 283
   step: 5425
@@ -169,7 +169,7 @@ topics:
   - title: Immutability
     theory_id: 7929
   - title: Computer algorithms
-    theory_id: 4953
+    theory_id: 16547
   - title: The big O notation
     theory_id: 13991
   - title: Data structures

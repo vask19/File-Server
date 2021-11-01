@@ -841,9 +841,6 @@ files:
 - name: src/server/data/er.txt
   visible: true
   learner_created: true
-- name: src/client/Request.java
-  visible: true
-  learner_created: true
 - name: src/client/test.java
   visible: true
   learner_created: true
@@ -857,6 +854,9 @@ files:
   visible: true
   learner_created: true
 - name: src/main/FileHandler.java
+  visible: true
+  learner_created: true
+- name: src/server/ServerR.java
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/projects/52/stages/286/implement#comment
