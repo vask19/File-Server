@@ -4,18 +4,17 @@ import java.io.*;
 import java.net.Socket;
 
 public class FileHandler implements AutoCloseable{
-    private Socket socket;
-    private BufferedWriter socketWriter;
-    private BufferedReader socketReader;
+
+    private BufferedWriter writer;
+    private BufferedReader reader;
     private BufferedOutputStream outputStream;
     private BufferedInputStream inputStream;
     private String outputPath;
     private String inputPath;
 
 
-    public FileHandler(Socket socket){
-        this.socket = socket;
-        createSocketStreams();
+    public FileHandler(){
+
     }
 
     public void setOutputPath(String outputPath) {
@@ -26,10 +25,11 @@ public class FileHandler implements AutoCloseable{
         this.inputPath = inputPath;
     }
 
-    public void  writingFromAStreamToABinaryFile(){
+    public void binaryFileHandling(){
+        createBinaryStreams();
         try {
             int i;
-            while ((i = socketReader.read()) != -1 ){
+            while ((i = inputStream.read()) != -1 ){
                 outputStream.write(i);
                 outputStream.flush();
             }
@@ -38,14 +38,18 @@ public class FileHandler implements AutoCloseable{
         }
 
     }
-
-    public void writingFromABinaryFileToAStream(){
-        try {
-            int i;
-            while ((i = inputStream.read()) != -1){
-                socketWriter.write(i);
-                socketWriter.flush();
+    public void textFileHandling() {
+        createTextStreams();
+        try{
+            String line;
+            while ( (line = reader.readLine()) != null)
+            {
+                writer.write(line);
+                writer.flush();
             }
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,34 +58,44 @@ public class FileHandler implements AutoCloseable{
 
 
 
+    private void createFile(String fileName) throws IOException {
+        File file = new File(fileName);
+        file.createNewFile();
+
+    }
 
 
-    private void createBinaryStreams(String outputFileName,String inputFileName){
+
+
+
+
+    private void createTextStreams(){
         try{
+            createFile(outputPath);
+            if (writer == null)
+                writer = new BufferedWriter(
+                        new OutputStreamWriter(
+                                new FileOutputStream(outputPath)));
+            if (reader == null)
+                reader = new BufferedReader(
+                        new InputStreamReader(
+                                new FileInputStream(inputPath)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void createBinaryStreams(){
+        try{
+            createFile(outputPath);
             if (outputStream == null){
                 outputStream = new BufferedOutputStream(
-                        new FileOutputStream(outputFileName));
+                        new FileOutputStream(outputPath));
             }
             if (inputStream == null){
                 inputStream = new BufferedInputStream(
-                        new FileInputStream(inputFileName));
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void createSocketStreams() {
-        try {
-            if (socketReader == null){
-                socketReader = new BufferedReader(
-                        new InputStreamReader(
-                                socket.getInputStream()));
-            }
-            if (socketWriter == null){
-                socketWriter = new BufferedWriter(
-                        new OutputStreamWriter(
-                                socket.getOutputStream()));
+                        new FileInputStream(inputPath));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,20 +103,21 @@ public class FileHandler implements AutoCloseable{
     }
 
 
-    public void getFile() {
-    }
+
+
 
 
     @Override
     public void close() throws Exception {
-        if (socketWriter != null) socketWriter.close();
-        if (socketReader != null) socketReader.close();
-        if (socket != null) socket.close();
+        if (writer != null) writer.close();
+        if (reader != null) reader.close();
+
         if (outputStream != null) outputStream.close();
         if (inputStream != null) inputStream.close();
 
 
     }
+
 
 
 }

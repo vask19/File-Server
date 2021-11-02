@@ -17,7 +17,7 @@ public class Client {
              createSocketsStreams(socket);
             System.out.println("The request was sent.");
             switch (answer) {
-                case "1" -> test(fileName);//sendGetRequest(fileName);
+                case "1" -> test1();//sendGetRequest(fileName);
                 case "2" -> sendPutRequest(fileName,date);
                 case "3" -> sendDeleteRequest(fileName);
                 case "exit" -> closeServer();
@@ -26,29 +26,15 @@ public class Client {
             e.printStackTrace();
         }
     }
-    private void test(String fileName) throws IOException {
-        socketWriter.write("4 5 6" + "\n");
-        socketWriter.flush();
-        try(BufferedOutputStream outputStream = new BufferedOutputStream(
-                new FileOutputStream("C:\\Users\\vask\\IdeaProjects\\File Server\\File Server\\task\\src\\client\\data\\" + fileName))
-        ) {
-            int i;
-            System.out.println("14");
-            while ((i = socketReader.read()) != -1 ){
-
-                outputStream.write(i);
-                System.out.println("14.5");
-                outputStream.flush();
-                System.out.println("15");
-
-            }
-            System.out.println("16");
+    private void test1(){
+        try {
+            socketWriter.write("DELETE 14.png ttt.txt\n");
+            socketWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-
 
     private void sendGetRequest(String fileName) throws IOException {
         if (fileName.matches("\\w+.txt")){
@@ -61,9 +47,6 @@ public class Client {
                     : "The response says that the file was not found!");
 
         }
-
-
-
 
     }
     private void saveTxtFile(String fileName){

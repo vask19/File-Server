@@ -3,10 +3,10 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        Server server = null;
+        ServerR server = null;
 
         try {
-            server = Server.getInstance();
+            server = ServerR.getInstance();
 
         } catch (IOException e) {
             e.printStackTrace();
