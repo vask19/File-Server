@@ -871,13 +871,10 @@ files:
 - name: src/server/data/txt.txt
   visible: true
   learner_created: true
-- name: src/main/files_id.txt
-  visible: true
-  learner_created: true
-- name: src/main/IdFIleVisitor.java
-  visible: true
-  learner_created: true
 - name: src/main/MapHandler.java
+  visible: true
+  learner_created: true
+- name: src/main/nameAndId.bin
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/projects/52/stages/286/implement#comment
