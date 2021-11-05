@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class MapHandler implements AutoCloseable{
-    private static volatile Map<String, String > filesNamesAndId;
+    private static volatile Map<String, String > filesIdAndNames;
     private static ObjectOutputStream outputStream;
     private static ObjectInputStream inputStream;
 
@@ -15,10 +15,11 @@ public class MapHandler implements AutoCloseable{
 
 
     public static void main(String[] args) {
-        filesNamesAndId = new HashMap<>();
-        filesNamesAndId.put("1","2");
+        filesIdAndNames = new HashMap<>();
+        filesIdAndNames.put("1","2");
         writeToFileWithDataFiles();
         System.out.println(readFileWithDataFiles());
+
 
 
 
@@ -36,16 +37,13 @@ public class MapHandler implements AutoCloseable{
         try(ObjectOutputStream outputStream = new ObjectOutputStream(
                 new FileOutputStream(Data.FILE_WITH_ID_AND_NAMES)
         )){
-            outputStream.writeObject(filesNamesAndId);
+            outputStream.writeObject(filesIdAndNames);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
     }
-
-
-
     private static Map<String,String> readFileWithDataFiles(){
 
         HashMap map = new HashMap<>();
@@ -57,21 +55,6 @@ public class MapHandler implements AutoCloseable{
             e.printStackTrace();
         }
 
-
-        /*
-
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(Data.FILE_WITH_ID_AND_NAMES)))){
-            String line;
-            while ((line = reader.readLine()) != null){
-                String fileName = line.split(" ")[0];
-                String fileId = line.split(" ")[1];
-                map.put(fileName,fileId);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return map;*/
         return map;
     }
     private  String createUniqueNameToFile(String ext){
@@ -89,6 +72,10 @@ public class MapHandler implements AutoCloseable{
     private UUID createUniqueIdToFIle(){
          return UUID.randomUUID();
     }
+
+
+
+
 
 
 

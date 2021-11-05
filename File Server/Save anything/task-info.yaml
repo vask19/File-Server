@@ -877,6 +877,21 @@ files:
 - name: src/main/nameAndId.bin
   visible: true
   learner_created: true
+- name: src/file_handler/d.java
+  visible: true
+  learner_created: true
+- name: src/file_handler/ServerFileVisitor.java
+  visible: true
+  learner_created: true
+- name: src/file_handler/Main.java
+  visible: true
+  learner_created: true
+- name: src/file_handler/data/m.txt
+  visible: true
+  learner_created: true
+- name: src/file_handler/data/n.txt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/52/stages/286/implement#comment
 status: Unchecked
 record: -1

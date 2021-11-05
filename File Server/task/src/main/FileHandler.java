@@ -65,10 +65,6 @@ public class FileHandler implements AutoCloseable{
     }
 
 
-
-
-
-
     private void createTextStreams(){
         try{
             createFile(outputPath);
@@ -103,10 +99,6 @@ public class FileHandler implements AutoCloseable{
     }
 
 
-
-
-
-
     @Override
     public void close() throws Exception {
         if (writer != null) writer.close();
@@ -118,25 +110,7 @@ public class FileHandler implements AutoCloseable{
 
     }
 
-
-
 }
 
 
 
-
-
-
-
-
-
-
-
-/*(BufferedOutputStream outputStream = new BufferedOutputStream(
-                    new FileOutputStream("C:\\Users\\vask\\IdeaProjects\\File Server\\File Server\\task\\src\\client\\data\\" + fileName))
-            )*/
-
-/*(BufferedInputStream inputStream = new BufferedInputStream(
-                    new FileInputStream("C:\\Users\\vask\\IdeaProjects\\File Server\\File Server\\task\\src\\server\\data\\123png.png"));
-
-            )*/
