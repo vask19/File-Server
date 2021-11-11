@@ -1,6 +1,6 @@
 package client;
 import main.Data;
-import streams.Streams;
+
 
 import java.io.*;
 import java.net.Socket;

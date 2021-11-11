@@ -850,9 +850,6 @@ files:
 - name: src/client/data/file2.txt
   visible: true
   learner_created: true
-- name: src/streams/Streams.java
-  visible: true
-  learner_created: true
 - name: src/main/FileHandler.java
   visible: true
   learner_created: true
