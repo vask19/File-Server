@@ -1,55 +1,183 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="FileServerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-10-16T10:39:27" hostname="HOME-PC" time="0.41">
+<testsuite name="FileServerTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2021-11-14T19:34:07" hostname="HOME-PC" time="3.961">
   <properties/>
-  <testcase name="start" classname="FileServerTest" time="0.41"/>
+  <testcase name="start" classname="FileServerTest" time="3.961">
+    <failure message="java.lang.AssertionError: Wrong answer in test #4&#10;&#10;Can't find a file after getting it from the server by name.&#10;Looks like your server lose all stored files after restart.&#10;You should store all downloaded files from the server in /client/data/ folder.&#10;&#10;Please find below the output of your program during this failed test.&#10;Note that the '&gt;' character indicates the beginning of the input line.&#10;&#10;---&#10;&#10;Enter action (1 - get a file, 2 - save a file, 3 - delete a file):&#10;&gt; 1&#10;Do you want to get the file by name or by id (1 - name, 2 - id):&#10;&gt; 1&#10;Enter name:&#10;&gt; test_purpose_newFile.txt&#10;The response says that this file is not found!" type="java.lang.AssertionError">java.lang.AssertionError: Wrong answer in test #4
+
+Can't find a file after getting it from the server by name.
+Looks like your server lose all stored files after restart.
+You should store all downloaded files from the server in /client/data/ folder.
+
+Please find below the output of your program during this failed test.
+Note that the '&gt;' character indicates the beginning of the input line.
+
+---
+
+Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
+&gt; 1
+Do you want to get the file by name or by id (1 - name, 2 - id):
+&gt; 1
+Enter name:
+&gt; test_purpose_newFile.txt
+The response says that this file is not found!
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.hyperskill.hstest.stage.StageTest.start(StageTest.java:155)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:78)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.runTestClass(JUnitTestClassExecutor.java:110)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:58)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:38)
+	at org.gradle.api.internal.tasks.testing.junit.AbstractJUnitTestClassProcessor.processTestClass(AbstractJUnitTestClassProcessor.java:62)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.processTestClass(SuiteTestClassProcessor.java:51)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:78)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
+	at jdk.proxy1/jdk.proxy1.$Proxy2.processTestClass(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.processTestClass(TestWorker.java:121)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:78)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:182)
+	at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:164)
+	at org.gradle.internal.remote.internal.hub.MessageHub$Handler.run(MessageHub.java:414)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.ManagedExecutorImpl$1.run(ManagedExecutorImpl.java:48)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:56)
+	at java.base/java.lang.Thread.run(Thread.java:831)
+</failure>
+  </testcase>
   <system-out><![CDATA[?[1;31m
 Start test 1?[0m
-Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
 > exit
-The request was sent.
-Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+?[1;31m
+Start test 2?[0m
+?[1;31m
+Start test 3?[0m
+Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
 > 2
-Enter filename:
-> test_purpose_VLL6W1G.txt
-Enter file content:
-> GUOD3FT55FRZWX4Y8M
-The request was sent.
-The response says that the file was created!
-Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+Enter name of the file:
+> test_purpose_test1.txt
+Enter name of the file to be saved on server:
+> 
+Response says that file is saved! ID = 945279191
+Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
 > 2
-Enter filename:
-> test_purpose_VLL6W1G.txt
-Enter file content:
-> GUOD3FT55FRZWX4Y8M
-The request was sent.
-The response says that creating the file was forbidden!
-Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+Enter name of the file:
+> test_purpose_test2.txt
+Enter name of the file to be saved on server:
+> test_purpose_newFile.txt
+Response says that file is saved! ID = 1537249106
+Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
 > 1
-Enter filename:
-> test_purpose_VLL6W1G.txt
-The request was sent.
-The content of the file is: GUOD3FT55FRZWX4Y8M
-Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+Do you want to get the file by name or by id (1 - name, 2 - id):
 > 1
-Enter filename:
-> test_purpose_OHDC8YU0J.txt
-The request was sent.
-The response says that the file was not found!
-Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
-> 3
-Enter filename:
-> test_purpose_9CZGMHIFE.txt
-The request was sent.
-The response says that the file was not found!
-Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
-> 3
-Enter filename:
-> test_purpose_VLL6W1G.txt
-The request was sent.
-The response says that the file was successfully deleted!
-Enter action (1 - get a file, 2 - create a file, 3 - delete a file):
+Enter name:
+> test_purpose_notExist.txt
+The response says that this file is not found!
+Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
+> 1
+Do you want to get the file by name or by id (1 - name, 2 - id):
+> 2
+Enter id:
+> 945279191511
+The response says that this file is not found!
+The response says that this file is not found!
+Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
+> 1
+Do you want to get the file by name or by id (1 - name, 2 - id):
+> 1
+Enter name:
+> test_purpose_newFile.txt
+Specify a name for it:
+> test_purpose_get.txt
+Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
+> 1
+Do you want to get the file by name or by id (1 - name, 2 - id):
+> 2
+Enter id:
+> 945279191
+Specify a name for it:
+> test_purpose_get_id.txt
+Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
 > exit
-The request was sent.
+?[1;31m
+Start test 4?[0m
+Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
+> 1
+Do you want to get the file by name or by id (1 - name, 2 - id):
+> 1
+Enter name:
+> test_purpose_newFile.txt
+The response says that this file is not found!
 ]]></system-out>
-  <system-err><![CDATA[]]></system-err>
+  <system-err><![CDATA[java.net.SocketException: Socket closed
+	at java.base/sun.nio.ch.NioSocketImpl.endAccept(NioSocketImpl.java:689)
+	at java.base/sun.nio.ch.NioSocketImpl.accept(NioSocketImpl.java:762)
+	at java.base/java.net.ServerSocket.implAccept(ServerSocket.java:681)
+	at java.base/java.net.ServerSocket.platformImplAccept(ServerSocket.java:647)
+	at java.base/java.net.ServerSocket.implAccept(ServerSocket.java:623)
+	at java.base/java.net.ServerSocket.implAccept(ServerSocket.java:580)
+	at java.base/java.net.ServerSocket.accept(ServerSocket.java:538)
+	at server.Server.startServer(Server.java:36)
+	at server.Main.main(Main.java:6)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:78)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.hyperskill.hstest.testing.execution.MainMethodExecutor.invokeMain(MainMethodExecutor.java:172)
+	at org.hyperskill.hstest.testing.execution.MainMethodExecutor.lambda$launch$0(MainMethodExecutor.java:199)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at java.base/java.lang.Thread.run(Thread.java:831)
+java.net.SocketException: Socket closed
+	at java.base/sun.nio.ch.NioSocketImpl.endAccept(NioSocketImpl.java:689)
+	at java.base/sun.nio.ch.NioSocketImpl.accept(NioSocketImpl.java:762)
+	at java.base/java.net.ServerSocket.implAccept(ServerSocket.java:681)
+	at java.base/java.net.ServerSocket.platformImplAccept(ServerSocket.java:647)
+	at java.base/java.net.ServerSocket.implAccept(ServerSocket.java:623)
+	at java.base/java.net.ServerSocket.implAccept(ServerSocket.java:580)
+	at java.base/java.net.ServerSocket.accept(ServerSocket.java:538)
+	at server.Server.startServer(Server.java:36)
+	at server.Main.main(Main.java:6)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:78)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.hyperskill.hstest.testing.execution.MainMethodExecutor.invokeMain(MainMethodExecutor.java:172)
+	at org.hyperskill.hstest.testing.execution.MainMethodExecutor.lambda$launch$0(MainMethodExecutor.java:199)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at java.base/java.lang.Thread.run(Thread.java:831)
+]]></system-err>
 </testsuite>

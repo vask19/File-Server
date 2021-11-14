@@ -555,182 +555,6 @@ files:
         }
     }
   learner_created: true
-- name: src/server/Server.java
-  visible: true
-  text: |+
-    package server;
-    import main.Data;
-
-    import java.io.*;
-    import java.net.*;
-    public class Server {
-        private Core core;
-        private static Server instance;
-        private BufferedWriter writer;
-        private BufferedReader reader;
-
-        private Server() {
-            core = new Core();
-            start();
-
-        }
-        public static Server getInstance() throws IOException {
-            if (instance == null) {
-                instance = new Server();
-            }
-            return instance;
-        }
-
-        private void run(Socket socket,ServerSocket serverSocket) throws IOException {
-            createStreams(socket);
-            String response = reader.readLine();
-            String httpMethod = response.split(" ")[0];
-
-            if (response.equals("exit")){
-                exit(socket,serverSocket);
-                return;
-            }
-
-            String fileName = response.split(" ")[1];
-
-             switch (httpMethod){
-                case "PUT" -> addFile(fileName);
-                case "DELETE" -> deleteFile(fileName);
-                case "GET" -> getFile(fileName);
-
-            }
-
-        }
-
-        private void exit(Socket socket, ServerSocket serverSocket) {
-            try {
-                socket.close();
-                serverSocket.close();
-            } catch (IOException e) {
-                throw new RuntimeException();
-            }
-
-        }
-
-
-        private void accept(ServerSocket serverSocket){
-            while (!serverSocket.isClosed()) {
-                try (Socket socket = serverSocket.accept();)
-                {
-                    run(socket,serverSocket);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        }
-        private void createStreams(Socket socket){
-            try {
-                writer = new BufferedWriter(
-                        new OutputStreamWriter(
-                                socket.getOutputStream()
-                        )
-                );
-                reader = new BufferedReader(
-                        new InputStreamReader(
-                                socket.getInputStream()
-                        )
-                );
-
-            } catch (IOException e) {
-                throw new RuntimeException();
-            }
-
-        }
-
-        private void start()  {
-            try (ServerSocket serverSocket =
-                         new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));)
-            {
-                accept(serverSocket);
-
-            } catch (IOException e) {
-               throw new RuntimeException();
-            }
-        }
-
-
-        public void getFile(String fileName){
-            String answer = (core.getFile(fileName));
-            try {
-                writer.write(answer + "\n");
-                writer.flush();
-            } catch (IOException e) {
-                throw new RuntimeException();
-            }
-
-
-        }
-        public void addFile(String fileName){
-            try {
-                String date = reader.readLine();
-                writer.write(core.addFile(fileName,date) +"\n");
-                writer.flush();
-            } catch (IOException e) {
-                throw new RuntimeException();
-            }
-        }
-        public void deleteFile(String fileName){
-            try {
-                writer.write(core.deleteFile(fileName) + "\n");
-                writer.flush();
-            } catch (IOException e) {
-                throw new RuntimeException();
-            }
-        }
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    class Session extends Thread {
-        private final Socket socket;
-
-
-        public Session(Socket socketForClient) {
-            this.socket = socketForClient;
-        }
-
-        @Override
-        public void run() {
-            try (
-
-                    DataInputStream input = new DataInputStream(socket.getInputStream());
-                    DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-            ) {
-                String msg = input.readUTF();
-
-
-                System.out.println(msg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-    }
-
-
-
-  learner_created: true
 - name: src/main/Data.java
   visible: true
   text: |
@@ -742,153 +566,30 @@ files:
 
     }
   learner_created: true
-- name: src/server/Core.java
-  visible: true
-  text: |
-    package server;
-
-    import java.io.*;
-    import java.util.ArrayList;
-    import java.util.List;
-    import java.util.Map;
-    import java.util.Scanner;
-    import java.util.regex.Pattern;
-
-    public class Core {
-        private final String dataPath = "C:\\Users\\vask\\IdeaProjects\\File Server\\File Server\\task\\src\\server\\data\\";
-        private String separator = File.separator;
-        private List<String > files;
-        private final Pattern pattern;
-        private static Core instance;
-
-
-        public Core(){
-            files = new ArrayList<>();
-            pattern = Pattern.compile("file([0-9]|10)");
-        };
-        public static Core getInstance(){
-            if (instance == null){
-                instance = new Core();
-            }
-            return instance;
-        }
-
-        private boolean chekFileName(String fileName){
-            return pattern.matcher(fileName).matches();
-        }
-
-        public String  addFile(String fileName,String date){
-            File file = new File(dataPath + fileName);
-            try {
-                if (!file.exists() & file.createNewFile()){
-                    writeInFile(file,date);
-                    return "200";
-                }
-
-            } catch (IOException e) {
-                throw new RuntimeException();
-            }
-            return "403";
-        }
-
-
-
-        public  String getFile(String fileName){
-            File file = new File(dataPath + fileName);
-            if (! file.exists())
-                return "404";
-            else return "200 " + readFile(file);
-        }
-
-
-        private void writeInFile(File file,String date){
-            try (BufferedWriter writer = new BufferedWriter(
-                    new FileWriter(file)
-            )){
-                writer.write(date);
-                writer.flush();
-            } catch (IOException e) {
-                throw new RuntimeException();
-            }
-
-        }
-
-        private String readFile(File file) {
-            StringBuilder fileContents = new StringBuilder();
-            try (Scanner scanner = new Scanner(file)){
-                while (scanner.hasNextLine())
-                    fileContents.append(scanner.nextLine());
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException();
-            }
-            return fileContents.toString();
-        }
-
-        public String  deleteFile(String fileName){
-            File file = new File(dataPath + fileName);
-            if (file.exists() & file.delete())
-                return "200";
-            return "404";
-        }
-
-
-
-    }
-  learner_created: true
-- name: src/server/data/rt.txt
-  visible: true
-  learner_created: true
-- name: src/server/data/er.txt
-  visible: true
-  learner_created: true
-- name: src/client/test.java
-  visible: true
-  learner_created: true
-- name: src/client/data/txt.txt
-  visible: true
-  learner_created: true
-- name: src/client/data/file2.txt
-  visible: true
-  learner_created: true
-- name: src/main/FileHandler.java
-  visible: true
-  learner_created: true
-- name: src/server/ServerR.java
-  visible: true
-  learner_created: true
-- name: src/client/data/14.png
-  visible: true
-  learner_created: true
-- name: src/client/data/15.png
-  visible: true
-  learner_created: true
-- name: src/client/data/err.txt
-  visible: true
-  learner_created: true
-- name: src/server/data/txt.txt
-  visible: true
-  learner_created: true
 - name: src/main/MapHandler.java
   visible: true
   learner_created: true
-- name: src/main/nameAndId.bin
-  visible: true
-  learner_created: true
-- name: src/file_handler/d.java
-  visible: true
-  learner_created: true
-- name: src/file_handler/ServerFileVisitor.java
-  visible: true
-  learner_created: true
-- name: src/file_handler/Main.java
-  visible: true
-  learner_created: true
-- name: src/file_handler/data/m.txt
-  visible: true
-  learner_created: true
-- name: src/file_handler/data/n.txt
-  visible: true
-  learner_created: true
 feedback_link: https://hyperskill.org/projects/52/stages/286/implement#comment
-status: Unchecked
+status: Failed
+feedback:
+  message: |-
+    Wrong answer in test #4
+
+    Can&#39;t find a file after getting it from the server by name.
+    Looks like your server lose all stored files after restart.
+    You should store all downloaded files from the server in /client/data/ folder.
+
+    Please find below the output of your program during this failed test.
+    Note that the &#39;&gt;&#39; character indicates the beginning of the input line.
+
+    ---
+
+    Enter action (1 - get a file, 2 - save a file, 3 - delete a file):
+    &gt; 1
+    Do you want to get the file by name or by id (1 - name, 2 - id):
+    &gt; 1
+    Enter name:
+    &gt; test_purpose_newFile.txt
+    The response says that this file is not found!
+  time: Sun, 14 Nov 2021 19:34:12 UTC
 record: -1

@@ -1,133 +1,56 @@
 package server;
-import main.Data;
 
-import java.io.*;
-import java.net.*;
+import data.Data;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 public class Server {
-    private final Core core;
-    private static Server instance;
-    private BufferedWriter writer;
-    private BufferedReader reader;
+    private static MapHandler mapHandler;
+    private static ServerSocket serverSocket;
 
-    private Server() {
-        core = new Core();
-        startServer();
-    }
-    public static Server getInstance() throws IOException {
-        if (instance == null) {
-            instance = new Server();
-        }
-        return instance;
-    }
-    private void startProcess(Socket socket,String response) throws IOException {
-        String httpMethod = response.split(" ")[0];
-        String fileName = response.split(" ")[1];
-         switch (httpMethod){
-            case "PUT" -> addFile(fileName);
-            case "DELETE" -> deleteFile(fileName);
-            case "GET" -> getFile(fileName);
-            case "4" -> test();
-        }
-    }
-
-    private void test(){
-        try( BufferedInputStream inputStream = new BufferedInputStream(
-                new FileInputStream("C:\\Users\\vask\\IdeaProjects\\File Server\\File Server\\task\\src\\server\\data\\123png.png"));
-
-        ) {
-            int i;
-
-            System.out.println("1");
-            while ((i = inputStream.read()) != -1){
-                writer.write(i);
-                System.out.println("2");
-                writer.flush();
-                System.out.println("3");
-            }
-            System.out.println("4");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-
-
-    }
-    private void closeConnection() {
+    public static void exit() {
         try {
-            reader.close();
-            writer.close();
+            serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    private void createStreams(Socket socket){
-        try {
-            writer = new BufferedWriter(
-                    new OutputStreamWriter(
-                            socket.getOutputStream()
-                    )
-            );
-            reader = new BufferedReader(
-                    new InputStreamReader(
-                            socket.getInputStream()
-                    )
-            );
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
+
+
+    private void writeMapHandler() {
+        mapHandler = new MapHandler();
     }
-    private void startServer()  {
-        try (ServerSocket serverSocket =
-                    new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH))){
-            while (!serverSocket.isClosed()) {
+
+
+
+    public void startServer() {
+        writeMapHandler();
+
+        try { serverSocket =
+                     new ServerSocket(Data.SERVER_PORT, 50, InetAddress.getByName(Data.SERVER_PATH));
+            while (true) {
                 Socket socket = serverSocket.accept();
-                createStreams(socket);
-                String response = reader.readLine();
-                if (response.equals("exit")){
-                    closeConnection();
-                    serverSocket.close();
-                    return;
+                try {
+                    Session session = new Session(socket, mapHandler);
+                    new Thread(session).start();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                new Thread(() -> {
-                    try {
-                        startProcess(socket,response);
-                        closeConnection();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-    public void getFile(String fileName){
-        String answer = (core.getFile(fileName));
-        try {
-            writer.write(answer + "\n");
-            writer.flush();
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-
-    }
-    public void addFile(String fileName){
-        try {
-            String date = reader.readLine();
-            writer.write(core.addFile(fileName,date) +"\n");
-            writer.flush();
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
-    public void deleteFile(String fileName){
-        try {
-            writer.write(core.deleteFile(fileName) + "\n");
-            writer.flush();
-        } catch (IOException e) {
-            throw new RuntimeException();
         }
     }
 }
+
+
+
+
+
+
+
+

@@ -1,31 +1,21 @@
 package client;
 
+import data.Data;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-        Client client = new Client();
-        String answer;
-        String date = " ";
-        String fileName =" ";
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Enter action (1 - get a file, 2 - create a file, 3 - delete a file):");
-        answer = sc.nextLine();
-        if (!answer.equals("exit")){
-            System.out.println("Enter filename:");
-            fileName = sc.nextLine();
-
-
-            if (answer.equals("2")) {
-                System.out.println("Enter file content:");
-                date = sc.nextLine();
-            }
-
+        try {
+            Socket socket = new Socket(Data.SERVER_PATH, Data.SERVER_PORT);
+            Client client = new Client(socket);
+            client.start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        client.start(answer,fileName,date);
-
 
 
     }
